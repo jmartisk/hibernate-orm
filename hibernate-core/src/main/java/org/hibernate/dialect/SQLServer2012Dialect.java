@@ -43,7 +43,7 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 
 	@Override
 	public String getCreateSequenceString(String sequenceName) {
-		return "create sequence " + sequenceName;
+		return "create sequence " + sequenceName + " start with 1";
 	}
 
 	@Override
