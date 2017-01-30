@@ -45,12 +45,15 @@ public class FilterInheritanceTest extends BaseCoreFunctionalTestCase {
 	protected void cleanupTest() throws Exception {
 		super.cleanupTest();
 		openSession();
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		session.createQuery( "delete from Human" ).executeUpdate();
-		session.createQuery( "delete from Mammal" ).executeUpdate();
-		session.getTransaction().commit();
-		session.close();
+			session.createQuery("delete from Human").executeUpdate();
+			session.createQuery("delete from Mammal").executeUpdate();
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
 	}
 
 	protected void persistTestData() {

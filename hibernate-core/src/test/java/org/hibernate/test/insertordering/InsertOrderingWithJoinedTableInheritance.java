@@ -62,18 +62,20 @@ public class InsertOrderingWithJoinedTableInheritance
 	public void testBatchOrdering() {
 		Session session = openSession();
 		session.getTransaction().begin();
-
+		try {
 			final Person person = new Person();
-			person.addAddress( new Address() );
-			session.persist( person );
+			person.addAddress(new Address());
+			session.persist(person);
 
 			// Derived Object with dependent object (address)
 			final SpecialPerson specialPerson = new SpecialPerson();
-			specialPerson.addAddress( new Address() );
-			session.persist( specialPerson );
+			specialPerson.addAddress(new Address());
+			session.persist(specialPerson);
 
-		session.getTransaction().commit();
-		session.close();
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
 	}
 
 	@Test
@@ -83,20 +85,21 @@ public class InsertOrderingWithJoinedTableInheritance
 
 		Session session = openSession();
 		session.getTransaction().begin();
-
+		try {
 			int iterations = 12;
-			for ( int i = 0; i < iterations; i++ ) {
+			for (int i = 0; i < iterations; i++) {
 				final Person person = new Person();
-				person.addAddress( new Address() );
-				session.persist( person );
+				person.addAddress(new Address());
+				session.persist(person);
 
 				final SpecialPerson specialPerson = new SpecialPerson();
-				specialPerson.addAddress( new Address() );
-				session.persist( specialPerson );
+				specialPerson.addAddress(new Address());
+				session.persist(specialPerson);
 			}
-
-		session.getTransaction().commit();
-		session.close();
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
 
 		assertEquals( 1, statementInspector.getCount( "insert into ADDRESS (PERSONID, ID) values (?, ?)" ) );
 		assertEquals(

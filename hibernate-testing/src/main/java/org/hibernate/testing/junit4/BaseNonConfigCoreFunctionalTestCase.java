@@ -483,9 +483,12 @@ public class BaseNonConfigCoreFunctionalTestCase extends BaseUnitTestCase {
 	protected void cleanupTestData() throws Exception {
 		Session s = openSession();
 		s.beginTransaction();
-		s.createQuery( "delete from java.lang.Object" ).executeUpdate();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			s.createQuery("delete from java.lang.Object").executeUpdate();
+			s.getTransaction().commit();
+		} finally {
+			s.close();
+		}
 	}
 
 
